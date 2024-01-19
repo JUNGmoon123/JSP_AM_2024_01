@@ -1,8 +1,8 @@
 package com.KoreaIT.java.Jsp_AM;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,13 +15,28 @@ public class printDanServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
-		
-		//사람이 주소에 직접입력
-		//Parameter가져온건 다 String이다.
+		response.setCharacterEncoding("EUC-KR");
+
+		PrintWriter out = response.getWriter();
+
 		String inputedDan = request.getParameter("dan");
 		String inputedLimit = request.getParameter("limit");
+		String color = request.getParameter("color");
+		String color2 = request.getParameter("color");
+		out.print("<html>");
+
+		out.print("<h2><body bgcolor ="+color+"><h2>");
+		out.print("<div style=\"color:red;\"><h2>"+123+"<h2></div>"+color2+"<br>");
 		
-		//if문이 없으면 밑에 int에 값이 null이라서 웹에서 실행조차 안됨.
+
+//		out.print("<h1>my home</h1>");
+
+		out.print("내 홈페이지에 온 것을 환영합니다.<br>");
+
+		out.print("</body>");
+
+		out.print("</html>");
+
 		if(inputedDan == null) {
 			inputedDan = "1";
 		}
