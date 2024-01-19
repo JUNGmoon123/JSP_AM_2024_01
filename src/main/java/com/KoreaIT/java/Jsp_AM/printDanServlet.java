@@ -1,7 +1,6 @@
 package com.KoreaIT.java.Jsp_AM;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,49 +8,40 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+//서블릿
 @WebServlet("/printDan")
 public class printDanServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		response.setContentType("text/html;charset=UTF-8");
-		response.setCharacterEncoding("EUC-KR");
 
-		PrintWriter out = response.getWriter();
+		response.setContentType("text/html;charset=UTF-8");
 
 		String inputedDan = request.getParameter("dan");
 		String inputedLimit = request.getParameter("limit");
-		String color = request.getParameter("color");
-		String color2 = request.getParameter("color");
-		out.print("<html>");
+		String inputedColor = request.getParameter("color");
 
-		out.print("<h2><body bgcolor ="+color+"><h2>");
-		out.print("<div style=\"color:red;\"><h2>"+123+"<h2></div>"+color2+"<br>");
-		
-
-//		out.print("<h1>my home</h1>");
-
-		out.print("내 홈페이지에 온 것을 환영합니다.<br>");
-
-		out.print("</body>");
-
-		out.print("</html>");
-
-		if(inputedDan == null) {
+		if (inputedDan == null) {
 			inputedDan = "1";
 		}
-		if(inputedLimit == null) {
+		if (inputedLimit == null) {
 			inputedLimit = "1";
 		}
+		if (inputedColor == null) {
+			inputedLimit = "black";
+		}
 		
+		//파람스 안씀 위에서 이미 if문으로 걸러냄, 
+		//requset에서 제대로 값이 안들어가는듯.알아볼것
 		int dan = Integer.parseInt(inputedDan);
 		int limit = Integer.parseInt(inputedLimit);
-		
-		response.getWriter().append(String.format("==%d단==<br>", dan));
 
+		response.getWriter().append(String.format("<div style=\"color:%s\";>==%d단==</div>", inputedColor, dan));
 
-		for (int i = 1; i <= 9; i++) {
-			response.getWriter().append(String.format("%d * %d = %d<br>", dan, i, dan * i));
+		for (int i = 1; i <= limit; i++) {
+			response.getWriter().append(
+					String.format("<div style=\"color:%s\";>%d * %d = %d</div>", inputedColor, dan, i, dan * i));
 		}
 	}
+
 }
