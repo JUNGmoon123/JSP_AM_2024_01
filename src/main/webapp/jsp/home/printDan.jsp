@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%
 int dan =2;
 if(request.getParameter("dan")!= null){
@@ -18,11 +18,11 @@ color = request.getParameter("color");
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>==<%=dan %>단==</h1>
+	<h1>==<%=dan %>�떒==</h1>
 	<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
 	Voluptas exercitationem quas tempora possimus. 
 	Nostrum eaque eos ducimus similique vitae fugit omnis itaque suscipit quaerat iusto? 
