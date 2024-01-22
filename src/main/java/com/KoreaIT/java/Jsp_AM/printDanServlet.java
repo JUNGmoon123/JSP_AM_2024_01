@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 //서블릿
-@WebServlet("/printDan")
+@WebServlet("/printDan2")
 public class printDanServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -28,11 +28,9 @@ public class printDanServlet extends HttpServlet {
 			inputedLimit = "1";
 		}
 		if (inputedColor == null) {
-			inputedLimit = "black";
+			inputedColor = "black";
 		}
-		
-		//파람스 안씀 위에서 이미 if문으로 걸러냄, 
-		//requset에서 제대로 값이 안들어가는듯.알아볼것
+
 		int dan = Integer.parseInt(inputedDan);
 		int limit = Integer.parseInt(inputedLimit);
 
