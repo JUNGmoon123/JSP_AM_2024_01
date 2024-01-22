@@ -26,7 +26,7 @@ public class ArticleListServlet extends HttpServlet {
 			System.out.println("클래스가 없습니다.");
 			e.printStackTrace();
 		}
-
+	
 		String url = "jdbc:mysql://127.0.0.1:3306/JSP_AM?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull";
 		String user = "root";
 		String password = "";
@@ -42,7 +42,7 @@ public class ArticleListServlet extends HttpServlet {
 			String sql = "SELECT * FROM article;";
 
 			List<Map<String, Object>> articleRows = dbUtil.selectRows(conn, sql);
-
+			
 //			response.getWriter().append(articleRows.toString());
 			//list라는 jsp파일 피요하다.
 			//articleRows를 set으로 넘겨준다.
