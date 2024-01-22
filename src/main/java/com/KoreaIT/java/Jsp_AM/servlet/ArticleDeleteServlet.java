@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/article/delete")
+@WebServlet("/article/doDelete")
 public class ArticleDeleteServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -41,13 +41,15 @@ public class ArticleDeleteServlet extends HttpServlet {
 
 			int id = Integer.parseInt(request.getParameter("id"));
 
-			String sql = String.format("SELECT * FROM article WHERE id = %d;", id);
+			SecSql sql = SecSql.from("DELETE");
+			sql.append("FROM article");
+			sql.append("WHERE id = ?;", id);
 
+			DBUtil.delete(conn, sql);
 
-			SecSql sqld = new SecSql();
-			sqld.append("DELETE FROM article");
-			sqld.append("WHERE id = ?;", id);
-			DBUtil.delete(conn, sqld);
+			response.getWriter()
+					.append(String.format("<script>alert('%d번 글이 삭제되었습니다.'); location.replace('list');</script>", id));
+
 		} catch (SQLException e) {
 			System.out.println("에러 : " + e);
 		} finally {
