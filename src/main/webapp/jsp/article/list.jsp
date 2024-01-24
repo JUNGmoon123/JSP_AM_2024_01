@@ -3,7 +3,6 @@
 <%@ page import="java.lang.Math"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-totalCnt
 <%
 List<Map<String, Object>> articleRows = (List<Map<String, Object>>) request.getAttribute("articleRows");
 int cPage = (int) request.getAttribute("page");
@@ -66,6 +65,9 @@ body {
 	</div>
 	<div>
 		<a href="write">글쓰기</a>
+	</div>
+	<div>
+		<a href="../member/join">M회원가입</a>
 	</div>
 
 	<h2>게시물 목록</h2>
