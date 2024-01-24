@@ -11,7 +11,7 @@
 	<h1>MAIN</h1>
 	<ul>
 		<li><a href="../article/list">리스트로 이동</a></li>
-		<li><a href="../member/join">이동2</a></li>
+		<li><a href="../member/join">회원가입으로 이동</a></li>
 	</ul>
 </body>
 </html>
