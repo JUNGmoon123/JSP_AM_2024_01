@@ -62,6 +62,8 @@ public class DBUtil {
 		} catch (SQLException e) {
 			System.out.println("=============Query 예외 발생================\n" + sql);
 			throw new SQLErrorException("SQL 예외, SQL : " + sql, e);
+		} catch (SQLErrorException e) {
+			e.getOrigin().printStackTrace();
 		} finally {
 			if (rs != null) {
 				try {
@@ -131,6 +133,8 @@ public class DBUtil {
 		} catch (SQLException e) {
 			System.out.println("=============Query 예외 발생================\n" + sql);
 			throw new SQLErrorException("SQL 예외, SQL : " + sql, e);
+		} catch (SQLErrorException e) {
+			e.getOrigin().printStackTrace();
 		} finally {
 			if (rs != null) {
 				try {
@@ -162,9 +166,10 @@ public class DBUtil {
 			stmt = sql.getPreparedStatement(dbConn);
 			affectedRows = stmt.executeUpdate();
 		} catch (SQLException e) {
-			//쿼리문 어디가 틀린지 보여줌
 			System.out.println("=============Query 예외 발생================\n" + sql);
 			throw new SQLErrorException("SQL 예외, SQL : " + sql, e);
+		} catch (SQLErrorException e) {
+			e.getOrigin().printStackTrace();
 		} finally {
 			if (stmt != null) {
 				try {
