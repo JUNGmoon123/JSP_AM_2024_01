@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Map;
 
 import com.KoreaIT.java.Jsp_AM.config.Config;
 import com.KoreaIT.java.Jsp_AM.exception.SQLErrorException;
@@ -17,8 +18,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet("/article/doWrite")
-public class ArticleDoWriteServlet extends HttpServlet {
+@WebServlet("/member/doLogin")
+public class MemberDoLoginServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -35,24 +36,37 @@ public class ArticleDoWriteServlet extends HttpServlet {
 
 		try {
 			conn = DriverManager.getConnection(Config.getDbUrl(), Config.getDbUser(), Config.getDbPw());
-			//세션불러오기 위해서 선언
+
+			String loginId = request.getParameter("loginId");
+			String loginPw = request.getParameter("loginPw");
+
+			SecSql sql = SecSql.from("SELECT *");
+			sql.append("FROM `member`");
+			sql.append("WHERE loginId = ?;", loginId);
+
+			Map<String, Object> memberRow = DBUtil.selectRow(conn, sql);
+
+			if (memberRow.isEmpty()) {
+				response.getWriter().append(String.format(
+						"<script>alert('%s는 없는 아이디입니다'); location.replace('../member/login');</script>", loginId));
+				return;
+			}
+
+			if (memberRow.get("loginPw").equals(loginPw) == false) {
+				response.getWriter().append(
+						String.format("<script>alert('비밀번호가 틀렸어'); location.replace('../member/login');</script>"));
+				return;
+			}
+
 			HttpSession session = request.getSession();
-
-			String title = request.getParameter("title");
-			String body = request.getParameter("body");
-			//로그인 한 상태에서 작성시 회원번호 넣기, 세션이용
-			int loginedMemberId = (int) session.getAttribute("loginedMemberId");
-
-			SecSql sql = SecSql.from("INSERT INTO article");
-			sql.append("SET regDate = NOW(),");
-			sql.append("memberId = ?,", loginedMemberId);
-			sql.append("title = ?,", title);
-			sql.append("`body` = ?;", body);
-
-			int id = DBUtil.insert(conn, sql);
+			session.setAttribute("loginedMemberId", memberRow.get("id"));
+			session.setAttribute("loginedMemberLoginId", memberRow.get("loginId"));
+			session.setAttribute("loginedMember", memberRow);
 
 			response.getWriter()
-					.append(String.format("<script>alert('%d번 글이 등록되었습니다.'); location.replace('list');</script>", id));
+					.append(String.format(
+							"<script>alert('%s님, 로그인 되었습니다.'); location.replace('../article/list');</script>",
+							memberRow.get("name")));
 
 		} catch (SQLException e) {
 			System.out.println("에러 : " + e);
