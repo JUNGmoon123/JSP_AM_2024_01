@@ -31,8 +31,6 @@ public class ArticleDetailServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 
-
-
 		Connection conn = null;
 
 		try {

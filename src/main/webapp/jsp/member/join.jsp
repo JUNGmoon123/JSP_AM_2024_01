@@ -1,6 +1,11 @@
 <%@ page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	
+	<%
+	Map<String, Object> memberRow = (Map<String, Object>) request.getAttribute("memberRow");
+	
+	%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,6 +46,12 @@
 				form.loginId.focus();
 				return;
 			}
+			if(loginId.equals(memberRow.get("loginid")){
+				alert('아이디중복 다시입력');
+				form.loginId.focus();
+				return;
+			}
+			
 			if (loginPw.length == 0) {
 				alert('비밀번호를 입력해주세요');
 				form.loginPw.focus();

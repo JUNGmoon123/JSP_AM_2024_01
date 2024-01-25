@@ -31,7 +31,6 @@ public class ArticleModifyServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 
-
 		Connection conn = null;
 
 		try {

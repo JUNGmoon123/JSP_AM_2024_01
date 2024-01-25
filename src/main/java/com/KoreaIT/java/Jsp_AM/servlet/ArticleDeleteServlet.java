@@ -30,7 +30,6 @@ public class ArticleDeleteServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 
-
 		Connection conn = null;
 
 		try {
@@ -41,9 +40,8 @@ public class ArticleDeleteServlet extends HttpServlet {
 
 			SecSql sql = SecSql.from("DELETE");
 			sql.append("FROM article");
-//			sql.append("WHERE id = ?;", id);
-//			콘솔에 에러나오게 바꿈
-			sql.append("WHERE i = ?;", id);
+//			sql.append("WHERE i = ?;", id);
+			sql.append("WHERE id = ?;", id);
 			DBUtil.delete(conn, sql);
 
 			response.getWriter()
