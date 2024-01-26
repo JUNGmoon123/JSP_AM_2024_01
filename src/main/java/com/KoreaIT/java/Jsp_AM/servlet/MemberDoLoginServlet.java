@@ -66,7 +66,7 @@ public class MemberDoLoginServlet extends HttpServlet {
 
 			response.getWriter()
 					.append(String.format(
-							"<script>alert('%s님, 로그인 되었습니다.'); location.replace('../article/list');</script>",
+							"<script>alert('%s님, 로그인 되었습니다.'); location.replace('../s/article/list');</script>",
 							memberRow.get("name")));
 
 		} catch (SQLException e) {

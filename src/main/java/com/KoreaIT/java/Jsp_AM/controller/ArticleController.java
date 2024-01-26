@@ -3,7 +3,6 @@ package com.KoreaIT.java.Jsp_AM.controller;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.List;
-import java.util.Map;
 
 import com.KoreaIT.java.Jsp_AM.dto.Article;
 import com.KoreaIT.java.Jsp_AM.service.ArticleService;

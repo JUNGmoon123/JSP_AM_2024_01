@@ -169,9 +169,11 @@ body {
 			<a class="<%=cPage == i ? "cPage" : ""%>" href="list?page=<%=i%>"><%=i%></a>
 			<%
 			}
-			int afterBtn = pageGroup + pageSize_v2;
+			//그룹이동 앞으로이동시 1->11->21 
+			//위에 뒤로 이동시는 알아서 해볼것.
+			int afterBtn = pageGroup * pageSize_v2 + 1;
 			if (afterBtn > totalPage) {
-			//	afterBtn = totalPage;
+			afterBtn = totalPage;
 			}
 			%>
 			<a href="list?page=<%=afterBtn%>">▷</a>

@@ -29,7 +29,7 @@ public class MemberDoLogoutServlet extends HttpServlet {
 
 		if (session.getAttribute("loginedMemberId") == null) {
 			response.getWriter().append(
-					String.format("<script>alert('로그인 후 이용해주세요'); location.replace('../member/login');</script>"));
+					String.format("<script>alert('로그인 후 이용해주세요'); location.replace('../../member/login');</script>"));
 			return;
 		}
 
@@ -52,7 +52,7 @@ public class MemberDoLogoutServlet extends HttpServlet {
 			session.removeAttribute("loginedMember");
 
 			response.getWriter().append(
-					String.format("<script>alert('로그아웃 되었습니다.'); location.replace('../article/list');</script>"));
+					String.format("<script>alert('로그아웃 되었습니다.'); location.replace('../s/article/list');</script>"));
 
 		} catch (SQLException e) {
 			System.out.println("에러 : " + e);
