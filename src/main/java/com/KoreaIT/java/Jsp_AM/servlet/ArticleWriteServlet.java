@@ -24,8 +24,21 @@ public class ArticleWriteServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 
 		HttpSession session = request.getSession();
-		//여기서 로그인하지 않았을 경우를 조건으로 걸러낸다. 작성글로 넘어가지않고
-		//팝업창띄운후 로그인페이지로 바로 보내기위함.
+
+		boolean isLogined = false;
+		int loginedMemberId = -1;
+		Map<String, Object> loginedMember = null;
+
+		if (session.getAttribute("loginedMemberId") != null) {
+			isLogined = true;
+			loginedMemberId = (int) session.getAttribute("loginedMemberId");
+			loginedMember = (Map<String, Object>) session.getAttribute("loginedMember");
+		}
+
+		request.setAttribute("isLogined", isLogined);
+		request.setAttribute("loginedMemberId", loginedMemberId);
+		request.setAttribute("loginedMember", loginedMember);
+
 		if (session.getAttribute("loginedMemberId") == null) {
 			response.getWriter().append(
 					String.format("<script>alert('로그인 후 이용해주세요'); location.replace('../member/login');</script>"));

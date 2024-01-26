@@ -1,12 +1,9 @@
-<%@ page import="java.util.List"%>
-<%@ page import="java.lang.Math"%>
 <%@ page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
 <%
 Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("articleRow");
-Map<String, Object> memberName = (Map<String, Object>) request.getAttribute("loginedMember");
 %>
 <!DOCTYPE html>
 <html>
@@ -15,7 +12,7 @@ Map<String, Object> memberName = (Map<String, Object>) request.getAttribute("log
 <title>게시물 상세페이지</title>
 </head>
 <body>
-
+	<%@ include file="../part/topBar.jspf"%>
 	<h2>게시물 상세페이지</h2>
 
 	<div>

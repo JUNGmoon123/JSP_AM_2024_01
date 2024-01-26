@@ -35,12 +35,18 @@ public class ArticleDoWriteServlet extends HttpServlet {
 
 		try {
 			conn = DriverManager.getConnection(Config.getDbUrl(), Config.getDbUser(), Config.getDbPw());
-			//세션불러오기 위해서 선언
+
 			HttpSession session = request.getSession();
 
 			String title = request.getParameter("title");
 			String body = request.getParameter("body");
-			//로그인 한 상태에서 작성시 회원번호 넣기, 세션이용
+
+			if (session.getAttribute("loginedMemberId") == null) {
+				response.getWriter().append(
+						String.format("<script>alert('로그인 후 이용해주세요'); location.replace('../member/login');</script>"));
+				return;
+			}
+
 			int loginedMemberId = (int) session.getAttribute("loginedMemberId");
 
 			SecSql sql = SecSql.from("INSERT INTO article");

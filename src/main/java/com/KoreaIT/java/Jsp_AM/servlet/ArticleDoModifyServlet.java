@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Map;
 
 import com.KoreaIT.java.Jsp_AM.config.Config;
 import com.KoreaIT.java.Jsp_AM.exception.SQLErrorException;
@@ -23,10 +24,6 @@ public class ArticleDoModifyServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
-		int loginedMemberId = -1;
-		HttpSession session = request.getSession();
-		loginedMemberId = (int)session.getAttribute("loginedMemberId");
-		
 		// DB연결
 		try {
 			Class.forName(Config.getDbDriverClassName());
@@ -45,26 +42,33 @@ public class ArticleDoModifyServlet extends HttpServlet {
 			String title = request.getParameter("title");
 			String body = request.getParameter("body");
 
-			SecSql sql = SecSql.from("UPDATE article");
+			HttpSession session = request.getSession();
+
+			int loginedMemberId = (int) session.getAttribute("loginedMemberId");
+
+			SecSql sql = SecSql.from("SELECT *");
+			sql.append("FROM article");
+			sql.append("WHERE id = ?;", id);
+
+			Map<String, Object> articleRow = DBUtil.selectRow(conn, sql);
+
+			if (loginedMemberId != (int) articleRow.get("memberId")) {
+				response.getWriter().append(
+						String.format("<script>alert('해당 글에 대한 권한이 없습니다.'); location.replace('list');</script>"));
+				return;
+			}
+
+			sql = SecSql.from("UPDATE article");
 			sql.append("SET ");
 			sql.append("title = ?,", title);
 			sql.append("`body` = ?", body);
 			sql.append("WHERE id = ?;", id);
-			if (loginedMemberId == id) {
-				DBUtil.update(conn, sql);
 
-				response.getWriter().append(String
-						.format("<script>alert('%d번 글이 수정되었습니다.'); location.replace('detail?id=%d');</script>", id, id));
+			DBUtil.update(conn, sql);
 
-			} else {
-				response.getWriter()
-						.append(String.format("<script>alert('작성자가 아닙니다.'); location.replace('list');</script>"));
-			}
-			if (loginedMemberId == -1) {
-				response.getWriter()
-						.append(String.format("<script>alert('로그인하세요'); location.replace('../home/main');</script>"));
-			}
-	
+			response.getWriter().append(String
+					.format("<script>alert('%d번 글이 수정되었습니다.'); location.replace('detail?id=%d');</script>", id, id));
+
 		} catch (SQLException e) {
 			System.out.println("에러 : " + e);
 		} catch (SQLErrorException e) {
