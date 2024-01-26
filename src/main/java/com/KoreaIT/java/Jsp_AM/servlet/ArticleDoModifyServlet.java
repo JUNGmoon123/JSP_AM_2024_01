@@ -15,6 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/article/doModify")
 public class ArticleDoModifyServlet extends HttpServlet {
@@ -22,6 +23,10 @@ public class ArticleDoModifyServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
+		int loginedMemberId = -1;
+		HttpSession session = request.getSession();
+		loginedMemberId = (int)session.getAttribute("loginedMemberId");
+		
 		// DB연결
 		try {
 			Class.forName(Config.getDbDriverClassName());
@@ -45,12 +50,21 @@ public class ArticleDoModifyServlet extends HttpServlet {
 			sql.append("title = ?,", title);
 			sql.append("`body` = ?", body);
 			sql.append("WHERE id = ?;", id);
+			if (loginedMemberId == id) {
+				DBUtil.update(conn, sql);
 
-			DBUtil.update(conn, sql);
+				response.getWriter().append(String
+						.format("<script>alert('%d번 글이 수정되었습니다.'); location.replace('detail?id=%d');</script>", id, id));
 
-			response.getWriter().append(String
-					.format("<script>alert('%d번 글이 수정되었습니다.'); location.replace('detail?id=%d');</script>", id, id));
-
+			} else {
+				response.getWriter()
+						.append(String.format("<script>alert('작성자가 아닙니다.'); location.replace('list');</script>"));
+			}
+			if (loginedMemberId == -1) {
+				response.getWriter()
+						.append(String.format("<script>alert('로그인하세요'); location.replace('../home/main');</script>"));
+			}
+	
 		} catch (SQLException e) {
 			System.out.println("에러 : " + e);
 		} catch (SQLErrorException e) {

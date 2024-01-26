@@ -53,8 +53,10 @@ public class ArticleListServlet extends HttpServlet {
 			int totalCnt = DBUtil.selectRowIntValue(conn, sql);
 			int totalPage = (int) Math.ceil(totalCnt / (double) itemsInAPage);
 
-			sql = SecSql.from("SELECT *");
-			sql.append("FROM article");
+			sql = SecSql.from("SELECT A.*, M.name AS writer");
+			sql.append("FROM article AS A");
+			sql.append("INNER JOIN `member` AS M");
+			sql.append("ON A.memberId = M.id");
 			sql.append("ORDER BY id DESC");
 			sql.append("LIMIT ?, ?;", limitFrom, itemsInAPage);
 
@@ -71,8 +73,7 @@ public class ArticleListServlet extends HttpServlet {
 			Map<String, Object> loginedMember = null;
 
 			HttpSession session = request.getSession();
-			
-			//로그인을 하지않았다면 세션속성은 null이다.
+
 			if (session.getAttribute("loginedMemberId") != null) {
 				isLogined = true;
 				loginedMemberId = (int) session.getAttribute("loginedMemberId");

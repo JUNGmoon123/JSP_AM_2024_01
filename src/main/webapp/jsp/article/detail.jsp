@@ -1,9 +1,12 @@
+<%@ page import="java.util.List"%>
+<%@ page import="java.lang.Math"%>
 <%@ page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
 <%
 Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("articleRow");
+Map<String, Object> memberName = (Map<String, Object>) request.getAttribute("loginedMember");
 %>
 <!DOCTYPE html>
 <html>
@@ -21,6 +24,9 @@ Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("art
 	<div>
 		날짜 :
 		<%=articleRow.get("regDate")%></div>
+	<div>
+		작성자 :
+		<%=articleRow.get("writer")%></div>
 	<div>
 		제목 :
 		<%=articleRow.get("title")%></div>

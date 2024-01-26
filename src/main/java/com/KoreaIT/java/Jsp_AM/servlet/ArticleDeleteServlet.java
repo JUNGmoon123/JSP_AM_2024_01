@@ -24,9 +24,15 @@ public class ArticleDeleteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
-		int loginedMemberId = -1;
+
 		HttpSession session = request.getSession();
-		loginedMemberId = (int)session.getAttribute("loginedMemberId");
+
+		if (session.getAttribute("loginedMemberId") == null) {
+			response.getWriter().append(
+					String.format("<script>alert('로그인 후 이용해주세요'); location.replace('../member/login');</script>"));
+			return;
+		}
+
 		// DB연결
 		try {
 			Class.forName(Config.getDbDriverClassName());
@@ -41,29 +47,31 @@ public class ArticleDeleteServlet extends HttpServlet {
 			conn = DriverManager.getConnection(Config.getDbUrl(), Config.getDbUser(), Config.getDbPw());
 			response.getWriter().append("연결 성공!");
 
-			String str = request.getParameter("id");
-			int id = Integer.parseInt(request.getParameter("memberId"));
-//			loginedMember = (Map<String, Object>) session.getAttribute("loginedMember");
+			int id = Integer.parseInt(request.getParameter("id"));
 
-			System.out.println(loginedMemberId);
-			System.out.println(str);
-			SecSql sql = SecSql.from("DELETE");
+			SecSql sql = SecSql.from("SELECT *");
 			sql.append("FROM article");
-			sql.append("WHERE memberId = ?;", id);
+			sql.append("WHERE id = ?;", id);
 
-			System.out.println(loginedMemberId);
-			if (loginedMemberId == id) {
-				DBUtil.delete(conn, sql);
+			Map<String, Object> articleRow = DBUtil.selectRow(conn, sql);
+
+			int loginedMemberId = (int) session.getAttribute("loginedMemberId");
+
+			if (loginedMemberId != (int) articleRow.get("memberId")) {
 				response.getWriter().append(
-						String.format("<script>alert('%d번 글이 삭제되었습니다.'); location.replace('list');</script>", id));
-			} else {
-				response.getWriter()
-						.append(String.format("<script>alert('작성자가 아닙니다.'); location.replace('list');</script>"));
+						String.format("<script>alert('해당 글에 대한 권한이 없습니다.'); location.replace('list');</script>"));
+				return;
 			}
-			if (loginedMemberId == -1) {
-				response.getWriter()
-						.append(String.format("<script>alert('로그인하세요'); location.replace('../home/main');</script>"));
-			}
+
+			sql = SecSql.from("DELETE");
+			sql.append("FROM article");
+			sql.append("WHERE id = ?;", id);
+
+			DBUtil.delete(conn, sql);
+
+			response.getWriter()
+					.append(String.format("<script>alert('%d번 글이 삭제되었습니다.'); location.replace('list');</script>", id));
+
 		} catch (SQLException e) {
 			System.out.println("에러 : " + e);
 		} catch (SQLErrorException e) {

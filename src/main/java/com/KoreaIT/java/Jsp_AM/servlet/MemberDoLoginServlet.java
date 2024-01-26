@@ -58,6 +58,7 @@ public class MemberDoLoginServlet extends HttpServlet {
 				return;
 			}
 
+			
 			HttpSession session = request.getSession();
 			session.setAttribute("loginedMemberId", memberRow.get("id"));
 			session.setAttribute("loginedMemberLoginId", memberRow.get("loginId"));
